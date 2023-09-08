@@ -1,0 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.app {
+  @apply relative flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+}
+
+/* Nav Component */
+.logo_text {
+  @apply max-sm:hidden font-satoshi font-semibold text-lg text-primary tracking-wide;
+}
+
+.dropdown {
+  @apply absolute right-0 top-full mt-2 w-full p-5 rounded-lg bg-white min-w-[210px] flex flex-col gap-2 justify-end items-end;
+}
+
+.dropdown_link {
+  @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
+}
+
+.outline_btn {
+  @apply border border-borderColor rounded-sm text-primary py-[.3rem] px-4
+}
+
+.white_btn {
+  @apply border bg-button rounded-sm text-button-text py-[.3rem] px-4
+}
+
+.input_name{
+  @apply py-2 px-4 bg-inherit outline-none border-b rounded-md placeholder:text-primary-foreground text-primary text-2xl
+}
+
+.input_desc{
+  @apply resize-none py-2 px-4 bg-inherit outline-none border-b rounded-md placeholder:text-primary-foreground text-primary
+}
