@@ -18,7 +18,7 @@
 }
 
 .dropdown_link {
-  @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
+  @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium mt-2;
 }
 
 .outline_btn {
