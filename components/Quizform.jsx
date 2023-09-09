@@ -1,23 +1,21 @@
 "use client";
 
-// QuizForm.js
-
-import React from "react";
+import React, { useEffect } from "react";
+import { RxCrossCircled } from "react-icons/rx";
+import { MdDelete } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setQuizName,
   setQuizDesc,
-  addQuestion,
-  addOption,
-  clearForm,
-  deleteQuestion,
   setCurrentQuestion,
   setCorrectOption,
-  setCurrentOptions,
+  addQuestion,
+  addOption,
+  updatePreviewData,
+  clearForm,
+  deleteOption,
+  deleteQuestion,
 } from "@/redux/slice/quizFormSlice";
-
-import { RxCrossCircled } from "react-icons/rx";
-import { MdDelete } from "react-icons/md";
 
 const QuizForm = () => {
   const quizForm = useSelector((state) => state.quizForm);
@@ -28,55 +26,84 @@ const QuizForm = () => {
     quizDesc,
     questions,
     currentQuestion,
-    currentOptions,
+    options,
     correctOption,
   } = quizForm;
 
+  useEffect(() => {
+    console.log(quizName, quizDesc, questions);
+  }, [quizName, quizDesc, questions]);
+
   const handleAddQuestion = () => {
-    if (currentQuestion) {
-      const newQuestion = {
-        id: Date.now(),
-        question: currentQuestion,
-        options: [...currentOptions],
-      };
-
-      dispatch(addQuestion(newQuestion));
-      dispatch(setCurrentQuestion(""));
-      dispatch(setCurrentOptions([]));
-      dispatch(setCorrectOption(0));
-
-      console.log(questions)
+    if (currentQuestion && options.every((option) => option.trim() !== "")) {
+      dispatch(
+        addQuestion({
+          question: currentQuestion,
+          options: [...options],
+          correctOption,
+        })
+      );
+      // Clear the current question and options after adding
+      dispatch(clearForm());
     } else {
-      alert("Please fill in the question.");
+      alert("Please fill in all fields for the question.");
     }
   };
 
   const handleAddOption = () => {
-    const updatedOptions = [...currentOptions, ""];
-    dispatch(setCurrentOptions(updatedOptions));
+    dispatch(
+      addOption({
+        optionIndex: options.length,
+        optionText: "",
+      })
+    );
   };
 
-  const handleDeleteOption = (questionId, optionIndex) => {
-    const question = questions.find((q) => q.id === questionId);
-    if (question) {
-      const updatedOptions = question.options.filter(
-        (_, idx) => idx !== optionIndex
-      );
-      dispatch(
-        addOption({
-          questionId: question.id,
-          options: updatedOptions,
-        })
-      );
-    }
+  // Function to handle radio button selection for an option
+  const handleOptionSelection = (optionIndex) => {
+    dispatch(setCorrectOption(optionIndex));
   };
 
-  const handleDeleteQuestion = (questionId) => {
-    dispatch(deleteQuestion({ id: questionId }));
+  const handleOptionText = (e, optionIndex) => {
+    // Dispatch an action to add/update an option in the Redux store
+    dispatch(
+      addOption({
+        optionIndex,
+        optionText: e.target.value,
+      })
+    );
+  };
+
+  const handleDeleteQuestion = (questionIndex) => {
+    dispatch(deleteQuestion({ questionIndex }));
+  };
+
+  const handleDeleteOption = (optionIndex) => {
+    dispatch(deleteOption({ optionIndex }));
   };
 
   const handleClearForm = () => {
     dispatch(clearForm());
+  };
+
+  const handleEditPreviewQuestion = (questionIndex, updatedQuestionData) => {
+    dispatch(updatePreviewData({ questionIndex, updatedQuestionData }));
+  };
+
+  // Function to update options and correctOption
+  const handleEditPreviewOptions = (questionIndex, options, correctOption) => {
+    // You can pass an object with options and correctOption fields
+    const updatedQuestionData = {
+      options,
+      correctOption,
+    };
+
+    dispatch(updatePreviewData({ questionIndex, updatedQuestionData }));
+  };
+
+  const handleDeletePreviewQuestion = (questionIndex) => {
+    dispatch(deleteQuestion({ questionIndex }));
+    dispatch(updatePreviewData({ questionIndex: 0 })); // Reset preview if deleted question was active
   };
 
   return (
@@ -109,178 +136,153 @@ const QuizForm = () => {
           </div>
         </div>
 
-
-          <div className="mt-12 mb-5 flex flex-col justify-center" key={0}>
-            <div className="border border-l-[1rem] border-l-primary rounded-md">
-              <div className="px-10 py-4 flex flex-col">
-                <input
-                  type="text"
-                  className="border-b border-b-primary bg-inherit outline-none placeholder:text-primary-foreground text-lg text-primary px-4 py-3"
-                  placeholder="Question"
-                  value={currentQuestion}
-                  onChange={(e) => dispatch(setCurrentQuestion(e.target.value))}
-                />
-
-                {currentOptions.map((option, optionIndex) => (
-                  <div className="mt-4" key={optionIndex}>
-                    <div className="flex gap-3 items-center">
-                      <input
-                        type="radio"
-                        value={optionIndex}
-                        checked={correctOption === optionIndex}
-                        onChange={() => dispatch(setCorrectOption(optionIndex))}
-                      />
-                      <input
-                        type="text"
-                        className="w-full border-b border-b-primary bg-inherit outline-none placeholder:text-primary-foreground text-lg text-primary px-4 py-3"
-                        placeholder="Option"
-                        value={option}
-                        onChange={(e) =>
-                          dispatch(
-                            setCurrentOptions({
-                              optionIndex,
-                              option: e.target.value,
-                            })
-                          )
-                        }
-                      />
-                      {optionIndex > 0 && (
-                        <RxCrossCircled
-                          className="text-primary text-2xl cursor-pointer"
-                          onClick={() => handleDeleteOption(0, optionIndex)}
-                        />
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                <div className="mt-6">
-                  <div
-                    className="flex gap-3 items-center cursor-pointer"
-                    onClick={handleAddOption}
-                  >
-                    <input type="radio" />
-                    <p className="text-primary-foreground">
-                      Add another option
-                    </p>
-                  </div>
-                </div>
-
-                <hr className="mt-8 mb-4" />
-
-                <div className="flex gap-3 items-center justify-between">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button className="white_btn" onClick={handleAddQuestion}>
-                      Add Question
-                    </button>
-                    <button className="outline_btn" onClick={handleClearForm}>
-                      Clear question
-                    </button>
-                  </div>
-                  <div>
-                    <MdDelete
-                      className="text-primary text-2xl cursor-pointer"
-                      onClick={() => handleDeleteQuestion(0)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        
-       {/*} {questions.map((question) => (
+        {questions.map((question, questionIndex) => (
           <div
             className="mt-12 mb-5 flex flex-col justify-center"
-            key={question.id}
+            key={questionIndex}
           >
             <div className="border border-l-[1rem] border-l-primary rounded-md">
               <div className="px-10 py-4 flex flex-col">
+                <h3 className="text-primary mb-3">{`Question ${
+                  questionIndex + 1
+                }`}</h3>
+
                 <input
                   type="text"
                   className="border-b border-b-primary bg-inherit outline-none placeholder:text-primary-foreground text-lg text-primary px-4 py-3"
                   placeholder="Question"
                   value={question.question}
                   onChange={(e) =>
-                    dispatch(
-                      addQuestion({
-                        id: question.id,
-                        question: e.target.value,
-                      })
-                    )
+                    handleEditPreviewQuestion(questionIndex, {
+                      question: e.target.value,
+                    })
                   }
                 />
+
                 {question.options.map((option, optionIndex) => (
                   <div className="mt-4" key={optionIndex}>
                     <div className="flex gap-3 items-center">
                       <input
                         type="radio"
                         value={optionIndex}
-                        checked={correctOption === optionIndex}
-                        onChange={() => dispatch(setCorrectOption(optionIndex))}
+                        checked={question.correctOption === optionIndex}
+                        onChange={() => {
+                          handleEditPreviewOptions(
+                            questionIndex,
+                            question.options,
+                            optionIndex
+                          );
+                        }}
                       />
                       <input
                         type="text"
                         className="w-full border-b border-b-primary bg-inherit outline-none placeholder:text-primary-foreground text-lg text-primary px-4 py-3"
                         placeholder={`Option ${optionIndex + 1}`}
                         value={option}
-                        onChange={(e) =>
-                          dispatch(
-                            addOption({
-                              questionId: question.id,
-                              optionId: optionIndex,
-                              option: e.target.value,
-                            })
-                          )
-                        }
+                        onChange={(e) => {
+                          const updatedOptions = [...question.options];
+                          updatedOptions[optionIndex] = e.target.value;
+                          handleEditPreviewOptions(
+                            questionIndex,
+                            updatedOptions,
+                            question.correctOption
+                          );
+                        }}
                       />
-                      {optionIndex > 0 && (
-                        <RxCrossCircled
-                          className="text-primary text-2xl cursor-pointer"
-                          onClick={() =>
-                            handleDeleteOption(question.id, optionIndex)
-                          }
-                        />
-                      )}
                     </div>
                   </div>
                 ))}
-                <div className="mt-6">
-                  <div
-                    className="flex gap-3 items-center cursor-pointer"
-                    onClick={() => handleAddOption()}
-                  >
-                    <input type="radio" />
-                    <p className="text-primary-foreground">
-                      Add another option
-                    </p>
-                  </div>
-                </div>
 
                 <hr className="mt-8 mb-4" />
 
                 <div className="flex gap-3 items-center justify-between">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button className="white_btn" onClick={handleAddQuestion}>
-                      Add Question
-                    </button>
-                    <button
-                      className="outline_btn"
-                      onClick={() => handleClearForm()}
-                    >
-                      Clear question
-                    </button>
-                  </div>
                   <div>
-                    <MdDelete
-                      className="text-primary text-2xl cursor-pointer"
-                      onClick={() => handleDeleteQuestion(question.id)}
-                    />
+                    <button
+                      className="white_btn"
+                      onClick={() => handleDeletePreviewQuestion(questionIndex)}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-                        ))} */}
+        ))}
+
+        <div className="mt-12 mb-5 flex flex-col justify-center">
+          <div className="border border-l-[1rem] border-l-primary rounded-md">
+            <div className="px-10 py-4 flex flex-col">
+              <input
+                type="text"
+                className="border-b border-b-primary bg-inherit outline-none placeholder:text-primary-foreground text-lg text-primary px-4 py-3"
+                placeholder="Question"
+                value={currentQuestion}
+                onChange={(e) => {
+                  dispatch(setCurrentQuestion(e.target.value));
+                }}
+              />
+
+              <div className="mt-4">
+                {options.map((option, optionIndex) => (
+                  <div
+                    className="flex gap-3 mt-2 items-center"
+                    key={optionIndex}
+                  >
+                    <input
+                      type="radio"
+                      name={`correctOption-${optionIndex}`}
+                      value={optionIndex}
+                      checked={correctOption === optionIndex}
+                      onChange={() => handleOptionSelection(optionIndex)}
+                    />
+                    <input
+                      type="text"
+                      className="w-full border-b border-b-primary bg-inherit outline-none placeholder:text-primary-foreground text-lg text-primary px-4 py-3"
+                      placeholder={`Option ${optionIndex + 1}`}
+                      value={option}
+                      onChange={(e) => handleOptionText(e, optionIndex)}
+                    />
+                    {optionIndex > 0 && (
+                      <MdDelete
+                        className="text-primary text-2xl cursor-pointer"
+                        onClick={() => handleDeleteOption(optionIndex)}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6">
+                <div
+                  className="flex gap-3 items-center cursor-pointer"
+                  onClick={() => handleAddOption()}
+                >
+                  <input type="radio" />
+                  <p className="text-primary-foreground">Add another option</p>
+                </div>
+              </div>
+
+              <hr className="mt-8 mb-4" />
+
+              <div className="flex gap-3 items-center justify-between">
+                <button
+                  className="white_btn"
+                  onClick={() => handleAddQuestion()}
+                >
+                  Add Question
+                </button>
+
+                <button
+                  className="outline_btn"
+                  onClick={() => handleClearForm()}
+                >
+                  Clear question
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

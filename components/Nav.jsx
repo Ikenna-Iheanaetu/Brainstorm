@@ -22,12 +22,6 @@ const Nav = () => {
     fetchProviders();
   }, []);
 
-  useEffect(() => {
-    window.addEventListener("click", () => {
-      if (showDropdown == true) setShowDropdown(false);
-    });
-  }, []);
-
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
@@ -96,7 +90,7 @@ const Nav = () => {
                 src={session?.user.image}
                 width={37}
                 height={37}
-                className="rounded-full cursor-pointer"
+                className="rounded-full border-2 border-primary outline-none"
                 alt="profile"
                 onClick={toggleDropdown}
               />

@@ -6,9 +6,14 @@ const initialState = {
   quizName: "",
   quizDesc: "",
   questions: [],
+  options: [""],
   currentQuestion: "",
-  currentOptions: [""],
   correctOption: 0,
+  previewData: {
+    question: "",
+    options: [],
+    correctOption: null,
+  },
 };
 
 const quizFormSlice = createSlice({
@@ -21,34 +26,48 @@ const quizFormSlice = createSlice({
     setQuizDesc: (state, action) => {
       state.quizDesc = action.payload;
     },
-    addQuestion: (state, action) => {
-      state.questions.push(action.payload);
-    },
-    addOption: (state, action) => {
-      const { questionId, option } = action.payload;
-      
-      const question = state.questions.find((q) => q.id === questionId);
-      if (question) {
-        question.options.push(option);
-      }
-    },
-    clearForm: (state) => {
-      state.currentQuestion = "";
-      state.currentOptions = [""];
-      state.correctOption = 0;
-    },
-    deleteQuestion: (state, action) => {
-      state.questions = state.questions.filter((q) => q.id !== action.payload.id);
-    },
     setCurrentQuestion: (state, action) => {
       state.currentQuestion = action.payload;
     },
     setCorrectOption: (state, action) => {
       state.correctOption = action.payload;
     },
-    setCurrentOptions: (state, action) => {
-      const { optionIndex, option } = action.payload;
-      state.currentOptions[optionIndex] = option;
+    addQuestion: (state, action) => {
+      state.questions.push(action.payload);
+    },
+    addOption: (state, action) => {
+      const { optionIndex, optionText } = action.payload;
+      // Ensure that the options array is long enough
+      while (state.options.length <= optionIndex) {
+        state.options.push("");
+      }
+      state.options[optionIndex] = optionText;
+    },
+    updatePreviewData: (state, action) => {
+      const { questionIndex, updatedQuestionData } = action.payload;
+      if (state.questions[questionIndex]) {
+        state.questions[questionIndex] = {
+          ...state.questions[questionIndex],
+          ...updatedQuestionData,
+        };
+      }
+    },  
+    clearForm: (state) => {
+      state.currentQuestion = "";
+      state.options = [""];
+      state.correctOption = 0;
+    },
+    deleteQuestion: (state, action) => {
+      const { questionIndex } = action.payload;
+      state.questions.splice(questionIndex, 1);
+    },
+    deleteOption: (state, action) => {
+      const optionIndex = action.payload;
+      state.options.splice(optionIndex, 1);
+      // Update the correctOption index if it's greater than the deleted option index
+      if (state.correctOption > optionIndex) {
+        state.correctOption -= 1;
+      }
     },
   },
 });
@@ -56,13 +75,15 @@ const quizFormSlice = createSlice({
 export const {
   setQuizName,
   setQuizDesc,
-  addQuestion,
-  addOption,
-  clearForm,
-  deleteQuestion,
   setCurrentQuestion,
   setCorrectOption,
-  setCurrentOptions,
+  addQuestion,
+  addOption,
+  updatePreviewData,
+  previewData,
+  clearForm,
+  deleteQuestion,
+  deleteOption,
 } = quizFormSlice.actions;
 
 export default quizFormSlice.reducer;
