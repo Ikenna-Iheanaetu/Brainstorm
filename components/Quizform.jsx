@@ -254,7 +254,6 @@ const QuizForm = () => {
                   className="flex gap-3 items-center cursor-pointer"
                   onClick={() => handleAddOption()}
                 >
-                  <input type="radio" />
                   <p className="text-primary-foreground">Add another option</p>
                 </div>
               </div>
