@@ -8,7 +8,6 @@ import Logo from "@/public/logo.png";
 
 const Nav = () => {
   const { data: session } = useSession();
-  console.log(session);
 
   const [providers, setProviders] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -17,7 +16,6 @@ const Nav = () => {
     async function fetchProviders() {
       const res = await getProviders();
       setProviders(res);
-      console.log(res);
     }
     fetchProviders();
   }, []);

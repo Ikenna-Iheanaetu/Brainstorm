@@ -30,9 +30,6 @@ const QuizForm = () => {
     correctOption,
   } = quizForm;
 
-  useEffect(() => {
-    console.log(quizName, quizDesc, questions);
-  }, [quizName, quizDesc, questions]);
 
   const handleAddQuestion = () => {
     if (currentQuestion && options.every((option) => option.trim() !== "")) {
@@ -90,9 +87,8 @@ const QuizForm = () => {
     dispatch(updatePreviewData({ questionIndex, updatedQuestionData }));
   };
 
-  // Function to update options and correctOption
   const handleEditPreviewOptions = (questionIndex, options, correctOption) => {
-    // You can pass an object with options and correctOption fields
+    
     const updatedQuestionData = {
       options,
       correctOption,
@@ -103,7 +99,7 @@ const QuizForm = () => {
 
   const handleDeletePreviewQuestion = (questionIndex) => {
     dispatch(deleteQuestion({ questionIndex }));
-    dispatch(updatePreviewData({ questionIndex: 0 })); // Reset preview if deleted question was active
+    dispatch(updatePreviewData({ questionIndex: 0 })); 
   };
 
   return (
