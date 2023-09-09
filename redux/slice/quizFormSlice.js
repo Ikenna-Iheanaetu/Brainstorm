@@ -51,7 +51,7 @@ const quizFormSlice = createSlice({
           ...updatedQuestionData,
         };
       }
-    },  
+    },
     clearForm: (state) => {
       state.currentQuestion = "";
       state.options = [""];
