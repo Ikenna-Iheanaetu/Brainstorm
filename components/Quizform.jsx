@@ -17,7 +17,7 @@ import {
   deleteQuestion,
 } from "@/redux/slice/quizFormSlice";
 
-const QuizForm = () => {
+const QuizForm = ({ handleSubmit, isLoading }) => {
   const quizForm = useSelector((state) => state.quizForm);
   const dispatch = useDispatch();
 
@@ -29,7 +29,6 @@ const QuizForm = () => {
     options,
     correctOption,
   } = quizForm;
-
 
   const handleAddQuestion = () => {
     if (currentQuestion && options.every((option) => option.trim() !== "")) {
@@ -88,7 +87,6 @@ const QuizForm = () => {
   };
 
   const handleEditPreviewOptions = (questionIndex, options, correctOption) => {
-    
     const updatedQuestionData = {
       options,
       correctOption,
@@ -99,7 +97,7 @@ const QuizForm = () => {
 
   const handleDeletePreviewQuestion = (questionIndex) => {
     dispatch(deleteQuestion({ questionIndex }));
-    dispatch(updatePreviewData({ questionIndex: 0 })); 
+    dispatch(updatePreviewData({ questionIndex: 0 }));
   };
 
   return (
@@ -277,6 +275,12 @@ const QuizForm = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div onClick={() => handleSubmit()}>
+          <button className="mt-4 white_btn">
+            {isLoading ? "Creating...." : "Create quiz"}
+          </button>
         </div>
       </div>
     </section>

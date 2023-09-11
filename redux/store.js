@@ -1,16 +1,14 @@
 "use client";
 
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "./slice/authSlice";
 import { brainStormApi } from "./query";
 import quizFormSlice from "./slice/quizFormSlice";
 
 export const store = configureStore({
   reducer: {
     // auth: authSlice,
+    
     quizForm: quizFormSlice,
-
-    // Add the generated reducer as a specific top-level slice
     [brainStormApi.reducerPath]: brainStormApi.reducer,
   },
 

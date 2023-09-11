@@ -73,6 +73,7 @@ const quizFormSlice = createSlice({
 });
 
 export const {
+  questions,
   setQuizName,
   setQuizDesc,
   setCurrentQuestion,
