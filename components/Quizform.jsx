@@ -277,8 +277,8 @@ const QuizForm = ({ handleSubmit, isLoading }) => {
           </div>
         </div>
 
-        <div onClick={() => handleSubmit()}>
-          <button className="my-4 white_btn">
+        <div>
+          <button className="my-4 white_btn" onClick={() => handleSubmit()}>
             {isLoading ? "Creating...." : "Create quiz"}
           </button>
         </div>
