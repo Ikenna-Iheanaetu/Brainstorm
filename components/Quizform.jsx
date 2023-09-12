@@ -258,7 +258,7 @@ const QuizForm = ({ handleSubmit, isLoading }) => {
 
               <hr className="mt-8 mb-4" />
 
-              <div className="flex gap-3 items-center justify-between">
+              <div className="flex gap-3 flex-col items-center justify-between min-[350px]:flex-row">
                 <button
                   className="white_btn"
                   onClick={() => handleAddQuestion()}
@@ -278,7 +278,7 @@ const QuizForm = ({ handleSubmit, isLoading }) => {
         </div>
 
         <div onClick={() => handleSubmit()}>
-          <button className="mt-4 white_btn">
+          <button className="my-4 white_btn">
             {isLoading ? "Creating...." : "Create quiz"}
           </button>
         </div>

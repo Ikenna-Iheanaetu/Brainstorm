@@ -57,6 +57,11 @@ const quizFormSlice = createSlice({
       state.options = [""];
       state.correctOption = 0;
     },
+    clearQuestions: (state) => {
+      state.quizName = '';
+      state.quizDesc = '';
+      state.questions = [];
+    },
     deleteQuestion: (state, action) => {
       const { questionIndex } = action.payload;
       state.questions.splice(questionIndex, 1);
@@ -83,6 +88,7 @@ export const {
   updatePreviewData,
   previewData,
   clearForm,
+  clearQuestions,
   deleteQuestion,
   deleteOption,
 } = quizFormSlice.actions;
