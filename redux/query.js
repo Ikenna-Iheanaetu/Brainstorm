@@ -4,11 +4,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Define a service using a base URL and expected endpoints
 export const brainStormApi = createApi({
   reducerPath: "brainStormApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.REQ_URL }),
   endpoints: (builder) => ({
     createQuiz: builder.mutation({
       query: (data) => ({
-        url: "/quiz/new",
+        url: "api/quiz/new",
         method: "POST",
         body: data,
       }),
