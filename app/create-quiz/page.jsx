@@ -23,6 +23,7 @@ const Createquiz = () => {
 
   const handleSubmit = async () => {
     // console.log(quizQuestions.length);
+
     if (quizQuestions.length < 1) {
       alert("Kindly add questions to the quiz");
       return;
@@ -44,11 +45,12 @@ const Createquiz = () => {
     // console.log(quizData);
 
     const res = await createQuiz(quizData);
+
     if (res.data.message === "Created successfully") {
       alert("Quiz created successfully");
       router.push("/");
       dispatch(clearQuestions());
-    }
+    } else alert('Quiz creation failed, please try again')
   };
 
   return <Quizform handleSubmit={handleSubmit} isLoading={isLoading} />;
