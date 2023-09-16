@@ -2,7 +2,7 @@ import { connectDb } from "@/utils/database";
 import Quiz from "@/models/quizModels";
 
 export const POST = async (req, res) => {
-  const { quizQuestions, author, quizName, quizDesc } = await req.json();
+  const { quizQuestions, author, quizName, quizDesc, createdAt } = await req.json();
 
   try {
     await connectDb();
@@ -12,6 +12,7 @@ export const POST = async (req, res) => {
     const newQuiz = new Quiz({
       quizQuestions,
       author,
+      createdAt,
       quizName,
       quizDesc,
     });

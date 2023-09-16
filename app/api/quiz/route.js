@@ -7,7 +7,6 @@ export const GET = async (req, res) => {
 
         const quiz = await Quiz.find({}).populate('author') 
 
-        console.log(quiz)
 
         return new Response(JSON.stringify(quiz), { status: 200 })
     }catch(error){

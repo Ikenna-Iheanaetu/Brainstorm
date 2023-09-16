@@ -13,7 +13,7 @@ module.exports = {
       },
       colors: {
         base: {
-          background: '#0C0A09'
+          background: "#0C0A09",
         },
         primary: {
           DEFAULT: "#FAFAF9",
@@ -28,7 +28,7 @@ module.exports = {
           text: "#18181B",
         },
         accent: {
-          DEFAULT: "hsl(60, 4.8%, 95.9%)",
+          DEFAULT: "#121212",
           foreground: "hsl(24, 9.8%, 10%)",
         },
         destructive: {

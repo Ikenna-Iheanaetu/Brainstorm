@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearQuestions } from "@/redux/slice/quizFormSlice";
+import moment from 'moment';
 
 const Createquiz = () => {
   const { data: session } = useSession();
@@ -33,16 +34,16 @@ const Createquiz = () => {
       alert("Kindly give the quiz a description");
       return;
     }
+    const date = moment().format()
 
     setIsLoading(true);
     const quizData = {
       quizName,
       quizDesc,
       quizQuestions,
+      createdAt: moment(date).format('MMMM Do YYYY, h:mm:ss a'),
       author: session?.user.id,
     };
-
-    // console.log(quizData);
 
     const response = await fetch("api/quiz/new", {
       method: "POST",
@@ -51,7 +52,7 @@ const Createquiz = () => {
       .then((res) => res.json())
       .catch((error) => console.log(error));
 
-    setIsLoading(false);
+      setIsLoading(false);
 
     if (response.message === "Created successfully") {
       alert("Quiz created successfully");
