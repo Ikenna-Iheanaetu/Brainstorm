@@ -4,16 +4,15 @@ import Quizform from "@/components/Quizform";
 import { useSession } from "next-auth/react";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { useCreateQuizMutation } from "@/redux/query";
 import { useRouter } from "next/navigation";
 import { clearQuestions } from "@/redux/slice/quizFormSlice";
 
 const Createquiz = () => {
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
   const quizQuestions = useSelector((state) => state.quizForm.questions);
   const quizName = useSelector((state) => state.quizForm.quizName);
   const quizDesc = useSelector((state) => state.quizForm.quizDesc);
-  const [createQuiz, { isLoading }] = useCreateQuizMutation();
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -35,22 +34,31 @@ const Createquiz = () => {
       return;
     }
 
+    setIsLoading(true);
     const quizData = {
       quizName,
       quizDesc,
       quizQuestions,
-      author: session.user.id,
+      author: session?.user.id,
     };
 
     // console.log(quizData);
 
-    const res = await createQuiz(quizData);
+    const response = await fetch("api/quiz/new", {
+      method: "POST",
+      body: JSON.stringify(quizData),
+    })
+      .then((res) => res.json())
+      .catch((error) => console.log(error));
 
-    if (res.data.message === "Created successfully") {
+    setIsLoading(false);
+
+    if (response.message === "Created successfully") {
       alert("Quiz created successfully");
+
       router.push("/");
       dispatch(clearQuestions());
-    } else alert('Quiz creation failed, please try again')
+    } else alert("Quiz creation failed, please try again");
   };
 
   return <Quizform handleSubmit={handleSubmit} isLoading={isLoading} />;
