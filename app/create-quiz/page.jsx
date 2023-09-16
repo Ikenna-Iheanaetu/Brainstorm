@@ -45,7 +45,7 @@ const Createquiz = () => {
       author: session?.user.id,
     };
 
-    const response = await fetch("api/quiz/new", {
+    const response = await fetch("/api/quiz/new", {
       method: "POST",
       body: JSON.stringify(quizData),
     })

@@ -22,7 +22,7 @@ export default function Feed() {
   const [searchedResults, setSearchedResults] = useState([]);
 
   async function get() {
-    const data = await fetch("http://localhost:3000/api/quiz").then((res) =>
+    const data = await fetch("/api/quiz").then((res) =>
       res.json()
     );
     setFeedData(data);
