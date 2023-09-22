@@ -3,7 +3,7 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 
-const page = ({ params }) => {
+const Page = ({ params }) => {
     const searchParams = useSearchParams()
     const quizAuthor = searchParams.get("name")
   return (
@@ -13,4 +13,4 @@ const page = ({ params }) => {
   );
 };
 
-export default page;
+export default Page;
