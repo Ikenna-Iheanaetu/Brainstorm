@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Card from "./Card";
 
 const DataCardList = ({ data }) => {
@@ -12,21 +12,14 @@ const DataCardList = ({ data }) => {
     </>
   );
 };
-
-export default function Feed() {
-  const [feedData, setFeedData] = useState([]);
+export default function Feed({ feedData }) {
 
   // Search states
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
-  async function get() {
-    const data = await fetch("/api/quiz").then((res) =>
-      res.json()
-    );
-    setFeedData(data);
-  }
+ 
 
   const filterQuiz = (searchtext) => {
     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
@@ -48,9 +41,6 @@ export default function Feed() {
     );
   };
 
-  useEffect(() => {
-    get();
-  }, []);
 
   return (
     <>

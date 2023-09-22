@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { BsArrowRightShort } from "react-icons/bs";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Card({ data }) {
+
+  const router = useRouter()
+
   return (
      <div className="card p-5 bg-primary mb-5">
         <div className="flex flex-col-reverse gap-3 min-[340px]:flex-row min-[340px]:items-center justify-between">
@@ -23,7 +28,7 @@ export default function Card({ data }) {
         </div>
         <div className="flex items-center gap-4 justify-between mt-5">
           <span className="text-[12px]">Created on {data.createdAt}</span>
-          <BsArrowRightShort className="text-2xl text-primary bg-accent rounded-full hover:cursor-pointer" />
+          <BsArrowRightShort onClick={() => router.push(`take-quiz/${data._id}?name=${data.author.username}`)} className="text-2xl text-primary bg-accent rounded-full hover:cursor-pointer" />
         </div>
       </div>
   );
