@@ -28,7 +28,7 @@ export default function Card({ data }) {
         </div>
         <div className="flex items-center gap-4 justify-between mt-5">
           <span className="text-[12px]">Created on {data.createdAt}</span>
-          <BsArrowRightShort onClick={() => router.push(`take-quiz/${data._id}?name=${data.author.username}`)} className="text-2xl text-primary bg-accent rounded-full hover:cursor-pointer" />
+          <BsArrowRightShort onClick={() => router.push(`take-quiz/${data._id}`)} className="text-2xl text-primary bg-accent rounded-full hover:cursor-pointer" />
         </div>
       </div>
   );

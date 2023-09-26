@@ -3,13 +3,9 @@
 import { useState, useEffect } from "react";
 import Feed from "@/components/Feed";
 
-
-
-
 export default function Home() {
 
   const [feedData, setFeedData] = useState([]);
-
 
   async function get() {
     const data = await fetch("/api/quiz").then((res) =>

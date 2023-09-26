@@ -4,6 +4,7 @@ import { useState } from "react";
 import Card from "./Card";
 
 const DataCardList = ({ data }) => {
+  
   return (
     <>
       {data.map((d) => (
@@ -12,6 +13,8 @@ const DataCardList = ({ data }) => {
     </>
   );
 };
+
+
 export default function Feed({ feedData }) {
 
   // Search states
