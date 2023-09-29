@@ -47,3 +47,7 @@
 .input_desc{
   @apply resize-none py-2 px-4 bg-inherit outline-none border-b rounded-md placeholder:text-primary-foreground text-primary
 }
+
+.glass_opt{
+  @apply h-full w-full bg-white rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100
+}

@@ -3,7 +3,7 @@
 import Quizform from "@/components/Quizform";
 import { useSession } from "next-auth/react";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { clearQuestions } from "@/redux/slice/quizFormSlice";
 import moment from 'moment';
