@@ -72,7 +72,7 @@ const Nav = () => {
                   onClick={() => signIn(provider.id)}
                   className="white_btn"
                 >
-                  Sign in
+                  Sign up
                 </button>
               ))}
           </>
@@ -126,7 +126,7 @@ const Nav = () => {
                   }}
                   className="white_btn"
                 >
-                  Sign in
+                  Sign up
                 </button>
               ))}
           </div>
