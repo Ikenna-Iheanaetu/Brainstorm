@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { setQuizQuestions } from "@/redux/slice/takenQuizSlice";
 import { updateQuizResult } from "@/redux/slice/quizResultSlice";
+import CountUp from "react-countup";
 
 export default function Page() {
   const [quizName, setQuizName] = useState("");
@@ -22,6 +23,7 @@ export default function Page() {
   });
 
   const quiz = useSelector((state) => state.takenQuiz);
+  const quizResult = useSelector((state) => state.quizResult);
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const quizId = searchParams.get("id");
@@ -34,10 +36,6 @@ export default function Page() {
 
       if (response) {
         const questions = response.data.quizQuestions;
-        // console.log(
-        //   response.data.quizQuestions,
-        //   response.data.quizQuestions
-        // );
         dispatch(setQuizQuestions({ questions }));
         setQuizName(response.data.quizName);
       }
@@ -47,7 +45,6 @@ export default function Page() {
   }, [quizId, dispatch]);
 
   const { questions, quizLength } = quiz;
-  // const quizArray = ;
   const currentQuestion = questions[quizTrack.activeQuestion]; // Access the nested array
 
   // const test = [
@@ -64,18 +61,21 @@ export default function Page() {
   const handleNextQuestion = () => {
     // Check if the selected answer is correct and update the result.
     const isCorrect =
-      quizTrack.selectedAnswer === currentQuestion.correctOption;
-    const newResult = { ...result };
+      quizTrack.selectedAnswerIndex === currentQuestion[0].correctOption;
+    const newResult = { ...quizResult };
+
+    
     if (isCorrect) {
       newResult.score += 1;
       newResult.correctAnswers += 1;
     } else {
       newResult.wrongAnswers += 1;
     }
+    console.log(isCorrect, newResult);
 
     // Update Redux with the new result.
     dispatch(updateQuizResult(newResult));
-
+    
     // Move to the next question or show the result.
     if (quizTrack.activeQuestion < quizLength - 1) {
       setQuizTrack((prevTrack) => ({
@@ -85,6 +85,7 @@ export default function Page() {
         checked: false,
         selectedAnswerIndex: null,
       }));
+      console.log(quizResult)
     } else {
       setQuizTrack((prevTrack) => ({ ...prevTrack, showResult: true }));
     }
@@ -146,7 +147,20 @@ export default function Page() {
             )}
           </div>
         ) : (
-          <div className="text-primary">question</div>
+          <div className="text-primary">
+            <div>
+              <h4 className="text-primary">This is you result!!!</h4>
+            </div>
+            <div>
+              <CountUp start={0} end={quizResult.percentage} delay={0}>
+                {({ countUpRef }) => (
+                  <div>
+                    <span className="text-primary" ref={countUpRef} />
+                  </div>
+                )}
+              </CountUp>
+            </div>
+          </div>
         )}
       </div>
     </div>
