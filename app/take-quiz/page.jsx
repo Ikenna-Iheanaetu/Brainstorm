@@ -64,7 +64,6 @@ export default function Page() {
       quizTrack.selectedAnswerIndex === currentQuestion[0].correctOption;
     const newResult = { ...quizResult };
 
-    
     if (isCorrect) {
       newResult.score += 1;
       newResult.correctAnswers += 1;
@@ -75,7 +74,7 @@ export default function Page() {
 
     // Update Redux with the new result.
     dispatch(updateQuizResult(newResult));
-    
+
     // Move to the next question or show the result.
     if (quizTrack.activeQuestion < quizLength - 1) {
       setQuizTrack((prevTrack) => ({
@@ -85,7 +84,7 @@ export default function Page() {
         checked: false,
         selectedAnswerIndex: null,
       }));
-      console.log(quizResult)
+      console.log(quizResult);
     } else {
       setQuizTrack((prevTrack) => ({ ...prevTrack, showResult: true }));
     }
@@ -149,13 +148,16 @@ export default function Page() {
         ) : (
           <div className="text-primary">
             <div>
-              <h4 className="text-primary">This is you result!!!</h4>
+              <h4 className="text-primary text-2xl mt-5">This is you result!!!</h4>
             </div>
             <div>
               <CountUp start={0} end={quizResult.percentage} delay={0}>
                 {({ countUpRef }) => (
                   <div>
-                    <span className="text-primary" ref={countUpRef} />
+                    <div>
+                      <span className='text-primary text-xl' ref={countUpRef} />
+                      <span className="text-primary text-xl">%</span>
+                    </div>
                   </div>
                 )}
               </CountUp>
