@@ -1,24 +1,6 @@
-'use client'
-
-import { useState, useEffect } from "react";
 import Feed from "@/components/Feed";
 
 export default function Home() {
-
-  const [feedData, setFeedData] = useState([]);
-
-  async function get() {
-    const data = await fetch("/api/quiz").then((res) =>
-      res.json()
-    );
-    setFeedData(data);
-  }
-
-  useEffect(() => {
-    get();
-  }, []);
-
-
   return (
     <>
       <div className="items-left flex flex-col gap-3">
@@ -31,7 +13,7 @@ export default function Home() {
           One Place!
         </h3>
       </div>
-      <Feed feedData={feedData} />
+      <Feed />
     </>
   );
 }

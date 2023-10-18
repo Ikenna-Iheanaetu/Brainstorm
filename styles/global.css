@@ -36,6 +36,10 @@
   @apply border border-borderColor rounded-sm text-primary py-[.3rem] px-4
 }
 
+.black_btn {
+  @apply rounded-sm bg-black text-primary py-[.3rem] px-4 rounded-md
+}
+
 .white_btn {
   @apply border bg-button rounded-sm text-button-text py-[.3rem] px-4
 }

@@ -27,6 +27,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const quizId = searchParams.get("id");
+  const [quizAuthorId, setQuizAuthorId] = useState('')
 
   useEffect(() => {
     async function getQuiz() {
@@ -38,6 +39,7 @@ export default function Page() {
         const questions = response.data.quizQuestions;
         dispatch(setQuizQuestions({ questions }));
         setQuizName(response.data.quizName);
+        console.log(questions)
       }
     }
 
@@ -57,6 +59,20 @@ export default function Page() {
   //   ],
   // ];
   // console.log(test, test[0][0], test[0].question);
+
+  const handleAddResultToDb = async () => {
+    try {
+      await fetch('/api/quiz/results',{
+        method: POST,
+        body: {
+          quizTakerId: null,
+          result: quizResult
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleNextQuestion = () => {
     // Check if the selected answer is correct and update the result.
@@ -148,14 +164,16 @@ export default function Page() {
         ) : (
           <div className="text-primary">
             <div>
-              <h4 className="text-primary text-2xl mt-5">This is you result!!!</h4>
+              <h4 className="text-primary text-2xl mt-5">
+                This is you result!!!
+              </h4>
             </div>
             <div>
               <CountUp start={0} end={quizResult.percentage} delay={0}>
                 {({ countUpRef }) => (
                   <div>
                     <div>
-                      <span className='text-primary text-xl' ref={countUpRef} />
+                      <span className="text-primary text-xl" ref={countUpRef} />
                       <span className="text-primary text-xl">%</span>
                     </div>
                   </div>

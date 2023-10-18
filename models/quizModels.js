@@ -3,20 +3,31 @@ import { Schema, model, models } from "mongoose";
 const quizSchema = new Schema({
   quizName: {
     type: String,
-    required: true
+    required: true,
   },
   quizDesc: {
     type: String,
-    required: true
+    required: true,
   },
   quizQuestions: {
-    type: [ Array ],
+    type: [Array],
     required: true,
   },
   createdAt: {
     type: String,
     required: true,
   },
+  results: [
+    {
+      quizTakerId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+      result: {
+        type: [Array],
+      },
+    },
+  ],
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
